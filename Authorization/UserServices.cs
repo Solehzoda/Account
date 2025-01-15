@@ -1,46 +1,64 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Authorization.Entities;
 
 namespace Authorization.Entities.UserServices
 {
     public class UserServices
     {
-        public User RegisterUser;
+        public User RegisteredUser;
+        public List<User> RegisteredUsers;
 
-        public User Registaration(string username, string password)
+        public List<User> Registration(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+
             {
-                Console.WriteLine("Заполните это поле");
+                Console.WriteLine("Username or password is empty");
             }
 
-            RegisterUser  = new User()
+            RegisteredUsers = new List<User>()
             {
-                Username = username,
-                Password = password
+                new User()
+                {
+                    Username = username,
+                    Password = password
+                }
+
             };
-            return RegisterUser;
-
-
+            return RegisteredUsers.ToList();
         }
 
         public bool Login(string username, string password)
         {
-            if (RegisterUser == null)
+            foreach (var registereduser in RegisteredUsers)
             {
-                Console.WriteLine("Ваедите логин и пароль");
-                return false;
+                if (registereduser == null)
+                {
+                    Console.WriteLine("Введите пароль!");
+                    return false;
+                }
+
+                if (registereduser.Username == username && registereduser.Password == password)
+                {
+                    Console.WriteLine("Вы успешно зарегистрировались");
+                    return true;
+                }
+
+                else
+                {
+                    Console.WriteLine("Неверно введен пароли и логин");
+                    return false;
+                }
             }
-            if (RegisterUser.Username == username && RegisterUser.Password == password)
-            {
-                Console.WriteLine("Вы зарегистрировались на 1XBET");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Неверно введен пароль или логин Пашол Нахуй далбаёб");
-                return false;
-            }
+
+            return false;
+        }
+
+        public List<User> GetUsers()
+        {
+            return RegisteredUsers;
         }
     }
 }
