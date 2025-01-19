@@ -1,7 +1,6 @@
 using System;
 
 namespace Authorization.Entities
-
 {
     public sealed class User
     {
@@ -21,6 +20,18 @@ namespace Authorization.Entities
             Email = string.Empty;
             PhoneNumber = string.Empty;
             Balance = 0;
+        }
+
+        // Добавление метода Transfer для перевода средств
+        public bool Transfer(User recipient, decimal amount)
+        {
+            if (this.Balance >= amount)
+            {
+                this.Balance -= amount;
+                recipient.Balance += amount;
+                return true;
+            }
+            return false;
         }
     }
 }
